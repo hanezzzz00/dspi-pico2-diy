@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"script",
+	"author":	"",
+	"description":	{
+		"":	"DSPi enclosure: Raspberry Pi Pico 2 H + PCM5102A DAC module / Krabička pro DSPi"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
