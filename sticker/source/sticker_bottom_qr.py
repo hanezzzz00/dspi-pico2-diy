@@ -12,7 +12,9 @@ from reportlab.graphics import renderPDF
 HERE = os.path.dirname(os.path.abspath(__file__))
 for n in ["Inter-Regular", "Inter-Medium", "Inter-SemiBold", "Inter-Bold", "InterDisplay-Black"]:
     pdfmetrics.registerFont(TTFont(n, os.path.join(HERE, "fonts", f"{n}.ttf")))
-OUT = sys.argv[1] if len(sys.argv) > 1 else "/home/claude/DSPi_samolepka_spodek_QR.pdf"
+LANG = (sys.argv[1] if len(sys.argv) > 1 else "cz").lower()   # "cz" nebo "en"
+def tr(cz, en): return en if LANG == "en" else cz
+OUT = sys.argv[2] if len(sys.argv) > 2 else "/home/claude/DSPi_samolepka_spodek_QR.pdf"
 
 URL = "https://github.com/hanezzzz00/dspi-pico2-diy"
 URL1, URL2 = "github.com/hanezzzz00/", "dspi-pico2-diy"
@@ -95,8 +97,8 @@ def bottom_sticker(c, ox, oy, cut=True):
     hx0, hx1 = ART_NOTCH + 1.2, W - ART_NOTCH - 1.2
     txt(c, X(hx0), Y(D - 12.6), "DSPi", "InterDisplay-Black", 21, NAVY)
     bars(c, X(hx0 + 0.3), Y(D - 15.0))
-    txt(c, X(hx1), Y(D - 8.8), "NÁVOD · GUIDE", "Inter-Bold", 6.4, TEAL, "r", 0.5)
-    txt(c, X(hx1), Y(D - 12.4), "CZ / EN", "Inter-SemiBold", 5.6, INK2, "r", 0.4)
+    txt(c, X(hx1), Y(D - 8.8), tr("NÁVOD", "BUILD GUIDE"), "Inter-Bold", 6.4, TEAL, "r", 0.5)
+    txt(c, X(hx1), Y(D - 12.4), tr("CZ / EN", "EN / CZ"), "Inter-SemiBold", 5.6, INK2, "r", 0.4)
 
     # QR na bílé dlaždici (dlaždice = světlá zóna 4 moduly)
     q = 34.0; qx, qy = ART_IN + 3.0, 15.6
@@ -107,11 +109,11 @@ def bottom_sticker(c, ox, oy, cut=True):
     rx = qx + q + 3.0
     y = qy + q - 3.2
     txt(c, X(rx), Y(y), "SCAN", "Inter-Bold", 7.2, PINK, space=0.6); y -= 4.6
-    for line in ["návod a nastavení", "build & setup guide", "STL + Fusion", "samolepky / stickers"]:
+    for line in tr(["návod a nastavení", "soubory STL pro tisk", "skript pro Fusion", "samolepky"], ["build & setup guide", "STL files to print", "Fusion script", "stickers"]):
         txt(c, X(rx), Y(y), line, "Inter-Medium", 5.4, NAVY); y -= 3.5
     y -= 2.4
     c.setStrokeColor(HexColor("#c4d2e2")); c.setLineWidth(0.4); c.line(X(rx), Y(y + 2.3), X(W - ART_IN - 2.2), Y(y + 2.3))
-    for line in ["Raspberry Pi Pico 2", "PCM5102A · 24-bit DAC", "firmware DSPi (Weeb Labs)"]:
+    for line in ["Raspberry Pi Pico 2", "PCM5102A · 24-bit DAC", tr("firmware DSPi (Weeb Labs)", "DSPi firmware (Weeb Labs)")]:
         txt(c, X(rx), Y(y - 0.4), line, "Inter-Regular", 4.6, INK2); y -= 3.1
 
     # URL dole mezi výřezy
@@ -132,7 +134,7 @@ def mini(c, ox, oy, s=26.0, cut=True):
     c.setFillColor(white); c.roundRect(X(0), Y(0), s * mm, h * mm, 2.4 * mm, stroke=0, fill=1)
     c.setFillColor(TEAL); c.roundRect(X(0), Y(h - 1.4), s * mm, 1.4 * mm, 0.6 * mm, stroke=0, fill=1)
     qr(c, X(0.5), Y(6.0), (s - 1.0) * mm)
-    txt(c, X(s / 2), Y(3.4), "DSPi · návod / guide", "Inter-Bold", 5.0, NAVY, "c")
+    txt(c, X(s / 2), Y(3.4), tr("DSPi · návod", "DSPi · build guide"), "Inter-Bold", 5.0, NAVY, "c")
     txt(c, X(s / 2), Y(1.1), "github.com/hanezzzz00", "Inter-Regular", 3.6, INK2, "c")
     if cut:
         c.setStrokeColor(CUTC); c.setLineWidth(0.35); c.setDash(1.6, 1.2)
@@ -141,16 +143,21 @@ def mini(c, ox, oy, s=26.0, cut=True):
 
 
 c = canvas.Canvas(OUT, pagesize=A4)
-c.setTitle("DSPi – samolepka na dno krabičky s QR kódem"); c.setAuthor("dspi-pico2-diy")
+c.setTitle(tr("DSPi – samolepka na dno krabičky s QR kódem", "DSPi – enclosure bottom sticker with QR code")); c.setAuthor("dspi-pico2-diy")
 PW, PH = A4
-txt(c, 15 * mm, PH - 16 * mm, "DSPi – samolepka na dno krabičky (QR kód na návod)", "Inter-Bold", 11, NAVY)
+txt(c, 15 * mm, PH - 16 * mm, tr("DSPi – samolepka na dno krabičky (QR kód na návod)", "DSPi – enclosure bottom sticker (QR code to the guide)"), "Inter-Bold", 11, NAVY)
 y0 = PH - 22 * mm
-for i, s in enumerate([
+for i, s in enumerate(tr([
         "Tiskněte ve SKUTEČNÉ VELIKOSTI (100 %), ne „přizpůsobit stránce“. Kontrolní měřítko dole musí mít přesně 50 mm.",
         "Velká samolepka má tvar dna krabičky (70,8 × 68,8 mm); rohové výřezy 10 × 10 mm jsou místo pro gumové nožičky.",
         "Potisk je 2 mm od řezu – okraj pro přesah laminovací fólie. Zalaminujte, pak stříhejte po přerušované čáře.",
         "QR kód má zvýšenou korekci chyb (Q), přečte se i přes lesklou fólii. Před nalepením ho vyzkoušejte telefonem.",
-        "Malé samolepky dole: jen QR kód, např. na kabel, krabičku od dílů nebo do šuplíku."]):
+        "Malé samolepky dole: jen QR kód, např. na kabel, krabičku od dílů nebo do šuplíku."], [
+        "Print at ACTUAL SIZE (100 %), not \"fit to page\". The scale bar below must measure exactly 50 mm.",
+        "The large sticker matches the enclosure bottom (70.8 × 68.8 mm); the 10 × 10 mm corner notches leave room for rubber feet.",
+        "The print stops 2 mm before the cut – margin for the laminating film. Laminate, then cut along the dashed line.",
+        "The QR code uses higher error correction (Q) and reads even through glossy film. Test it with a phone before sticking.",
+        "Small stickers below: QR code only, e.g. for a cable, a parts box or a drawer."])):
     txt(c, 15 * mm, y0 - i * 4.4 * mm, s, "Inter-Regular", 7.6, INK2)
 
 top = PH - 50 * mm - D * mm
@@ -165,6 +172,6 @@ bx, by = 15 * mm, 24 * mm
 c.setStrokeColor(NAVY); c.setLineWidth(0.6); c.line(bx, by, bx + 50 * mm, by)
 for k in range(6):
     c.line(bx + k * 10 * mm, by, bx + k * 10 * mm, by + (2.2 if k in (0, 5) else 1.2) * mm)
-txt(c, bx + 52 * mm, by - 0.8 * mm, "kontrolní měřítko 50 mm", "Inter-Regular", 7, INK2)
+txt(c, bx + 52 * mm, by - 0.8 * mm, tr("kontrolní měřítko 50 mm", "50 mm scale bar"), "Inter-Regular", 7, INK2)
 txt(c, 15 * mm, 14 * mm, URL + "  ·  CC BY-SA 4.0", "Inter-Regular", 6.5, INK2)
 c.showPage(); c.save(); print(OUT)

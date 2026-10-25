@@ -1,3 +1,7 @@
+import sys, os
+LANG = (sys.argv[1] if len(sys.argv) > 1 else "cz").lower()   # "cz" nebo "en"
+def tr(cz, en): return en if LANG == "en" else cz
+os.chdir(os.path.dirname(os.path.abspath(__file__)))   # fonts/ relativně ke skriptu
 import math
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -9,7 +13,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 for n in ["Inter-Regular", "Inter-Medium", "Inter-SemiBold", "Inter-Bold", "InterDisplay-Black", "InterDisplay-Bold"]:
     pdfmetrics.registerFont(TTFont(n, f"fonts/{n}.ttf"))
 
-OUT = "/home/claude/DSPi_samolepka_vika.pdf"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "/home/claude/DSPi_samolepka_vika.pdf"
 
 # --- víko (mm, počátek = levý přední roh, Y dozadu) ---
 LID_W, LID_D, LID_R = 70.8, 68.8, 4.0
@@ -210,14 +214,14 @@ def note(c, x, y, text, size=8, font="Inter-Regular", color=HexColor("#333333"))
 
 
 c = canvas.Canvas(OUT, pagesize=A4)
-c.setTitle("DSPi – samolepka na víko"); c.setAuthor("DSPi krabička")
+c.setTitle(tr("DSPi – samolepka na víko", "DSPi – lid sticker")); c.setAuthor(tr("DSPi krabička", "DSPi enclosure"))
 PW, PH = A4
 
 # ===== strana 1: tiskový arch =====
-note(c, 15 * mm, PH - 15 * mm, "DSPi – samolepka na víko krabičky", 13, "Inter-Bold", HexColor("#111111"))
-note(c, 15 * mm, PH - 21 * mm, "Tiskněte ve SKUTEČNÉ VELIKOSTI (100 %, bez „Přizpůsobit stránce“). Ověřte měřítkem dole: musí mít přesně 50 mm.", 8)
-note(c, 15 * mm, PH - 25.5 * mm, "Řežte podle značek v rozích – barva přesahuje 2 mm za řez, takže drobná nepřesnost nevadí. Hlavní samolepka 50,8 × 40,8 mm,", 8)
-note(c, 15 * mm, PH - 30 * mm, "proužek pod tlačítka 27,8 × 7,4 mm (lepte až po osazení tlačítek). Několik kusů navíc pro případ pokaženého řezu.", 8)
+note(c, 15 * mm, PH - 15 * mm, tr("DSPi – samolepka na víko krabičky", "DSPi – enclosure lid sticker"), 13, "Inter-Bold", HexColor("#111111"))
+note(c, 15 * mm, PH - 21 * mm, tr("Tiskněte ve SKUTEČNÉ VELIKOSTI (100 %, bez „Přizpůsobit stránce“). Ověřte měřítkem dole: musí mít přesně 50 mm.", "Print at ACTUAL SIZE (100 %, no \"Fit to page\"). Check with the scale bar below: it must be exactly 50 mm."), 8)
+note(c, 15 * mm, PH - 25.5 * mm, tr("Řežte podle značek v rozích – barva přesahuje 2 mm za řez, takže drobná nepřesnost nevadí. Hlavní samolepka 50,8 × 40,8 mm,", "Cut along the corner marks – the colour bleeds 2 mm past the cut, so small inaccuracies do not matter. Main sticker 50.8 × 40.8 mm,"), 8)
+note(c, 15 * mm, PH - 30 * mm, tr("proužek pod tlačítka 27,8 × 7,4 mm (lepte až po osazení tlačítek). Několik kusů navíc pro případ pokaženého řezu.", "button strip 27.8 × 7.4 mm (apply after fitting the buttons). Spare copies in case of a bad cut."), 8)
 
 cols = [15, 80, 145]
 row_y = [PH / mm - 95, PH / mm - 155]
@@ -236,22 +240,22 @@ c.line(bx, by, bx + 50 * mm, by)
 for k in range(6):
     hgt = 3 if k % 5 == 0 else 1.8
     c.line(bx + k * 10 * mm, by, bx + k * 10 * mm, by + hgt * mm)
-note(c, bx + 52 * mm, by - 0.8 * mm, "kontrolní měřítko 50 mm", 8)
-note(c, 15 * mm, 50 * mm, "Tip: tiskněte na samolepicí fotopapír nebo samolepicí fólii; matný papír přetřete lakem nebo přelepte průhlednou fólií.", 8)
-note(c, 15 * mm, 45.5 * mm, "Umístění na víko ukazuje strana 2 (také 1:1 – můžete ji vystřihnout a použít jako šablonu).", 8)
+note(c, bx + 52 * mm, by - 0.8 * mm, tr("kontrolní měřítko 50 mm", "50 mm scale bar"), 8)
+note(c, 15 * mm, 50 * mm, tr("Tip: tiskněte na samolepicí fotopapír nebo samolepicí fólii; matný papír přetřete lakem nebo přelepte průhlednou fólií.", "Tip: print on self-adhesive photo paper or vinyl; varnish matte paper or cover it with clear film."), 8)
+note(c, 15 * mm, 45.5 * mm, tr("Umístění na víko ukazuje strana 2 (také 1:1 – můžete ji vystřihnout a použít jako šablonu).", "Page 2 shows the placement on the lid (also 1:1 – you can cut it out and use it as a template)."), 8)
 c.showPage()
 
 # ===== strana 2: umístění na víku =====
-note(c, 15 * mm, PH - 15 * mm, "Umístění na víko (měřítko 1:1, pohled shora, přední hrana dole)", 13, "Inter-Bold", HexColor("#111111"))
-note(c, 15 * mm, PH - 21 * mm, "Hlavní samolepka: 10 mm od levé hrany víka, 2 mm od zadní hrany. Šipka USB pak míří přesně na USB, šipka STEREO OUT na jack.", 8)
-note(c, 15 * mm, PH - 25.5 * mm, "Proužek pod tlačítka lepte až po provrtání otvorů pro tlačítka (čárkované kruhy).", 8)
+note(c, 15 * mm, PH - 15 * mm, tr("Umístění na víko (měřítko 1:1, pohled shora, přední hrana dole)", "Placement on the lid (1:1, top view, front edge at the bottom)"), 13, "Inter-Bold", HexColor("#111111"))
+note(c, 15 * mm, PH - 21 * mm, tr("Hlavní samolepka: 10 mm od levé hrany víka, 2 mm od zadní hrany. Šipka USB pak míří přesně na USB, šipka STEREO OUT na jack.", "Main sticker: 10 mm from the left edge of the lid, 2 mm from the back edge. The USB arrow then points at USB, STEREO OUT at the jack."), 8)
+note(c, 15 * mm, PH - 25.5 * mm, tr("Proužek pod tlačítka lepte až po provrtání otvorů pro tlačítka (čárkované kruhy).", "Apply the button strip only after drilling the button holes (dashed circles)."), 8)
 ox, oy = (PW - LID_W * mm) / 2, PH - 120 * mm
 lid_outline(c, ox, oy)
 # popisky okolí
-note(c, ox + USB_X * mm - 8 * mm, oy + LID_D * mm + 4 * mm, "zadní stěna – USB", 8, "Inter-SemiBold")
+note(c, ox + USB_X * mm - 8 * mm, oy + LID_D * mm + 4 * mm, tr("zadní stěna – USB", "back wall – USB"), 8, "Inter-SemiBold")
 c.saveState(); c.translate(ox + LID_W * mm + 4 * mm, oy + JACK_Y * mm - 10 * mm); c.rotate(90)
-note(c, 0, 0, "pravá stěna – jack", 8, "Inter-SemiBold"); c.restoreState()
-note(c, ox + 18 * mm, oy - 7 * mm, "přední hrana", 8, "Inter-SemiBold")
+note(c, 0, 0, tr("pravá stěna – jack", "right wall – jack"), 8, "Inter-SemiBold"); c.restoreState()
+note(c, ox + 18 * mm, oy - 7 * mm, tr("přední hrana", "front edge"), 8, "Inter-SemiBold")
 c.setStrokeColor(HexColor("#2ec4b6")); c.setLineWidth(0.8)
 c.line(ox + USB_X * mm, oy + LID_D * mm + 0.5 * mm, ox + USB_X * mm, oy + LID_D * mm + 3.2 * mm)
 c.setStrokeColor(HexColor("#ff8a3d"))

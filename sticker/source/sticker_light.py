@@ -1,3 +1,7 @@
+import sys, os
+LANG = (sys.argv[1] if len(sys.argv) > 1 else "cz").lower()   # "cz" nebo "en"
+def tr(cz, en): return en if LANG == "en" else cz
+os.chdir(os.path.dirname(os.path.abspath(__file__)))   # fonts/ relativně ke skriptu
 import math
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -8,7 +12,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 for n in ["Inter-Regular", "Inter-Medium", "Inter-SemiBold", "Inter-Bold", "InterDisplay-Black", "InterDisplay-Bold"]:
     pdfmetrics.registerFont(TTFont(n, f"fonts/{n}.ttf"))
-OUT = "/home/claude/DSPi_samolepka_vika_svetla.pdf"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "/home/claude/DSPi_samolepka_vika_svetla.pdf"
 
 # víko (mm; počátek levý přední roh, Y dozadu)
 LID_W, LID_D, LID_R = 70.8, 68.8, 4.0
@@ -195,14 +199,14 @@ def note(c, x, y, text, size=8, font="Inter-Regular", color=HexColor("#333333"))
     c.setFont(font, size); c.setFillColor(color); c.drawString(x, y, text)
 
 
-c = canvas.Canvas(OUT, pagesize=A4); c.setTitle("DSPi – samolepka na víko (světlá)")
+c = canvas.Canvas(OUT, pagesize=A4); c.setTitle(tr("DSPi – samolepka na víko (světlá)", "DSPi – lid sticker (light)"))
 PW, PH = A4
-note(c, 15 * mm, PH - 15 * mm, "DSPi – samolepka na celé víko (světlá verze, pro laminování)", 13, "Inter-Bold", HexColor("#111111"))
+note(c, 15 * mm, PH - 15 * mm, tr("DSPi – samolepka na celé víko (světlá verze, pro laminování)", "DSPi – full-lid sticker (light version, for laminating)"), 13, "Inter-Bold", HexColor("#111111"))
 for i, t in enumerate([
-        "Tiskněte ve SKUTEČNÉ VELIKOSTI (100 %). Kontrolní měřítko dole musí mít přesně 50 mm.",
-        "Po zalaminování stříhejte podle šedé přerušované čáry – mezi potiskem a čarou zůstane 2 mm fólie, která drží zatavená.",
-        "Rohové výřezy 10 × 10 mm nechávají volné šrouby víka. Kruhy POWER / SPK / HP jsou nad zahloubeními pro tlačítka –",
-        "po jejich provrtání otvor v samolepce prořízněte skalpelem (nebo děrovačkou Ø 12 mm)."]):
+        tr("Tiskněte ve SKUTEČNÉ VELIKOSTI (100 %). Kontrolní měřítko dole musí mít přesně 50 mm.", "Print at ACTUAL SIZE (100 %). The scale bar below must measure exactly 50 mm."),
+        tr("Po zalaminování stříhejte podle šedé přerušované čáry – mezi potiskem a čarou zůstane 2 mm fólie, která drží zatavená.", "After laminating, cut along the grey dashed line – 2 mm of sealed film remains between the print and the cut."),
+        tr("Rohové výřezy 10 × 10 mm nechávají volné šrouby víka. Kruhy POWER / SPK / HP jsou nad zahloubeními pro tlačítka –", "The 10 × 10 mm corner notches leave the lid screws free. The POWER / SPK / HP rings sit over the button recesses –"),
+        tr("po jejich provrtání otvor v samolepce prořízněte skalpelem (nebo děrovačkou Ø 12 mm).", "after drilling them, cut the sticker open with a scalpel (or a Ø 12 mm hole punch).")]):
     note(c, 15 * mm, PH - (21 + i * 4.5) * mm, t, 8)
 # dva kusy vedle sebe s mezerou (každý se laminuje/stříhá samostatně)
 for k, ox in enumerate((22 * mm, 22 * mm + LID_W * mm + 25 * mm)):
@@ -212,9 +216,9 @@ bx, by = 15 * mm, 40 * mm
 c.setStrokeColor(HexColor("#000000")); c.setLineWidth(0.4); c.line(bx, by, bx + 50 * mm, by)
 for k in range(6):
     c.line(bx + k * 10 * mm, by, bx + k * 10 * mm, by + (3 if k % 5 == 0 else 1.8) * mm)
-note(c, bx + 52 * mm, by - 0.8 * mm, "kontrolní měřítko 50 mm", 8)
+note(c, bx + 52 * mm, by - 0.8 * mm, tr("kontrolní měřítko 50 mm", "50 mm scale bar"), 8)
 # náhled na víku
-note(c, 15 * mm, PH - 140 * mm, "Náhled na víku (1:1, pohled shora, přední hrana dole; USB vzadu, jack vpravo)", 9, "Inter-SemiBold")
+note(c, 15 * mm, PH - 140 * mm, tr("Náhled na víku (1:1, pohled shora, přední hrana dole; USB vzadu, jack vpravo)", "Preview on the lid (1:1, top view, front edge at the bottom; USB at the back, jack on the right)"), 9, "Inter-SemiBold")
 ox, oy = 22 * mm, PH - 225 * mm
 lid_bg(c, ox, oy); draw_sticker(c, ox, oy, cut_line=False)
 c.showPage(); c.save(); print(OUT)
