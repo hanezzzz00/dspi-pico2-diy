@@ -32,6 +32,7 @@ This repository has everything you need to build one:
 | [`enclosure/fusion/DSPi_krabicka/`](enclosure/fusion/DSPi_krabicka/) | Fusion script that generates both parts; every dimension is a parameter at the top of the file |
 | [`sticker/DSPi_lid_sticker_light.pdf`](sticker/DSPi_lid_sticker_light.pdf) | full-lid sticker, light version with a margin for laminating (recommended) |
 | [`sticker/DSPi_lid_sticker_dark.pdf`](sticker/DSPi_lid_sticker_dark.pdf) | dark version: labels and button strips |
+| [`sticker/DSPi_bottom_sticker_QR.pdf`](sticker/DSPi_bottom_sticker_QR.pdf) | bottom sticker with a QR code linking to this repository (corner notches for rubber feet), plus small QR-only labels |
 | [`sticker/source/`](sticker/source/) | Python/reportlab sources of the stickers (they need the [Inter](https://rsms.me/inter/) font, OFL) |
 
 ## Hardware
@@ -95,7 +96,7 @@ V repozitáři najdete:
 
 - **návod** na zapojení, nahrání firmwaru, nastavení v DSPi Console, ladění zvuku, presety a ovládací panel: [DSPi_navod_CZ.pdf](docs/DSPi_navod_CZ.pdf)
 - **3D tištěnou krabičku** (STL a skript pro Fusion) s návodem na tisk a sestavení: [DSPi_krabicka_CZ.pdf](docs/DSPi_krabicka_CZ.pdf)
-- **samolepku na víko** k vytištění: [světlá](sticker/DSPi_lid_sticker_light.pdf) (doporučená, s okrajem pro laminaci) a [tmavá](sticker/DSPi_lid_sticker_dark.pdf)
+- **samolepku na víko** k vytištění: [světlá](sticker/DSPi_lid_sticker_light.pdf) (doporučená, s okrajem pro laminaci) a [tmavá](sticker/DSPi_lid_sticker_dark.pdf), na dno krabičky [samolepka s QR kódem](sticker/DSPi_bottom_sticker_QR.pdf) odkazujícím sem
 
 Názvy STL: `spodek` je spodní díl, `viko` je víko (při tisku ho otočte vnější plochou dolů).
 Pico i modul DAC se v krabičce vkládají do lůžek a lepí, šroubky M2 nepotřebujete.
