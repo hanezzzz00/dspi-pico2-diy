@@ -13,7 +13,7 @@ This repository has everything you need to build one:
 
 - a **step-by-step build and setup guide** (PDF, English and Czech): wiring, flashing, DSPi Console, tuning the sound, presets and a control panel
 - a **3D-printed enclosure**: STL files plus a parametric Autodesk Fusion script
-- a **printable lid sticker** (light and dark versions)
+- **printable stickers** for the lid and the bottom (with a QR code), in English and Czech
 
 > This is a community build guide. It is not affiliated with Weeb Labs or Raspberry Pi. For the firmware itself,
 > releases and support, go to the [DSPi repository](https://github.com/WeebLabs/DSPi).
@@ -30,10 +30,10 @@ This repository has everything you need to build one:
 | [`enclosure/stl/DSPi_krabicka_spodek.stl`](enclosure/stl/DSPi_krabicka_spodek.stl) | enclosure **base** |
 | [`enclosure/stl/DSPi_krabicka_viko.stl`](enclosure/stl/DSPi_krabicka_viko.stl) | enclosure **lid** (flip it outer face down for printing) |
 | [`enclosure/fusion/DSPi_krabicka/`](enclosure/fusion/DSPi_krabicka/) | Fusion script that generates both parts; every dimension is a parameter at the top of the file |
-| [`sticker/DSPi_lid_sticker_light.pdf`](sticker/DSPi_lid_sticker_light.pdf) | full-lid sticker, light version with a margin for laminating (recommended) |
-| [`sticker/DSPi_lid_sticker_dark.pdf`](sticker/DSPi_lid_sticker_dark.pdf) | dark version: labels and button strips |
-| [`sticker/DSPi_bottom_sticker_QR.pdf`](sticker/DSPi_bottom_sticker_QR.pdf) | bottom sticker with a QR code linking to this repository (corner notches for rubber feet), plus small QR-only labels |
-| [`sticker/source/`](sticker/source/) | Python/reportlab sources of the stickers (they need the [Inter](https://rsms.me/inter/) font, OFL) |
+| **DSPi_lid_sticker_light** · [EN](sticker/DSPi_lid_sticker_light_EN.pdf) · [CZ](sticker/DSPi_lid_sticker_light_CZ.pdf) | full-lid sticker, light version with a margin for laminating (recommended) |
+| **DSPi_lid_sticker_dark** · [EN](sticker/DSPi_lid_sticker_dark_EN.pdf) · [CZ](sticker/DSPi_lid_sticker_dark_CZ.pdf) | dark version: labels and button strips |
+| **DSPi_bottom_sticker_QR** · [EN](sticker/DSPi_bottom_sticker_QR_EN.pdf) · [CZ](sticker/DSPi_bottom_sticker_QR_CZ.pdf) | bottom sticker with a QR code linking to this repository (corner notches for rubber feet), plus small QR-only labels |
+| [`sticker/source/`](sticker/source/) | Python/reportlab sources of the stickers; run e.g. `python3 sticker_light.py en out.pdf` (needs the [Inter](https://rsms.me/inter/) font, OFL, in `fonts/` next to the script) |
 
 ## Hardware
 
@@ -96,7 +96,7 @@ V repozitáři najdete:
 
 - **návod** na zapojení, nahrání firmwaru, nastavení v DSPi Console, ladění zvuku, presety a ovládací panel: [DSPi_navod_CZ.pdf](docs/DSPi_navod_CZ.pdf)
 - **3D tištěnou krabičku** (STL a skript pro Fusion) s návodem na tisk a sestavení: [DSPi_krabicka_CZ.pdf](docs/DSPi_krabicka_CZ.pdf)
-- **samolepku na víko** k vytištění: [světlá](sticker/DSPi_lid_sticker_light.pdf) (doporučená, s okrajem pro laminaci) a [tmavá](sticker/DSPi_lid_sticker_dark.pdf), na dno krabičky [samolepka s QR kódem](sticker/DSPi_bottom_sticker_QR.pdf) odkazujícím sem
+- **samolepku na víko** k vytištění: [světlá](sticker/DSPi_lid_sticker_light_CZ.pdf) (doporučená, s okrajem pro laminaci) a [tmavá](sticker/DSPi_lid_sticker_dark_CZ.pdf), na dno krabičky [samolepka s QR kódem](sticker/DSPi_bottom_sticker_QR_CZ.pdf) odkazujícím sem
 
 Názvy STL: `spodek` je spodní díl, `viko` je víko (při tisku ho otočte vnější plochou dolů).
 Pico i modul DAC se v krabičce vkládají do lůžek a lepí, šroubky M2 nepotřebujete.
